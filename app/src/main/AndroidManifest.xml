@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jorgepinedo.fivepizza">
+    package="com.jorgepinedo.faivpizza">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -11,26 +11,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppThemeHome">
-        <activity android:name=".LockOrderActivity">
+        <activity android:name="com.jorgepinedo.faivpizza.LockOrderActivity">
 
         </activity>
         <activity
-            android:name=".AdminActivity"
-            android:parentActivityName=".MainActivity"></activity>
-        <activity android:name=".LockActivity" />
-        <activity android:name=".PaymentActivity">
+            android:name="com.jorgepinedo.faivpizza.AdminActivity"
+            android:parentActivityName="com.jorgepinedo.faivpizza.MainActivity"></activity>
+        <activity android:name="com.jorgepinedo.faivpizza.LockActivity" />
+        <activity android:name="com.jorgepinedo.faivpizza.PaymentActivity">
 
         </activity>
-        <activity android:name=".FinishActivity" />
-        <activity android:name=".InitSplashActivity">
+        <activity android:name="com.jorgepinedo.faivpizza.FinishActivity" />
+        <activity android:name="com.jorgepinedo.faivpizza.InitSplashActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.jorgepinedo.faivpizza.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape" />
     </application>

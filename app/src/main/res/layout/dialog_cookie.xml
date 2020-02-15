@@ -92,7 +92,7 @@
                                                             app:layout_constraintVertical_bias="0.540">
 
                                                                 <TextView
-                                                                    android:id="@+id/price"
+                                                                    android:id="@+id/tv_price"
                                                                     android:layout_width="match_parent"
                                                                     android:layout_height="wrap_content"
                                                                     android:text="$10000"
