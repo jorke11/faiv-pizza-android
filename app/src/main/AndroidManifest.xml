@@ -16,14 +16,15 @@
         </activity>
         <activity
             android:name="com.jorgepinedo.faivpizza.AdminActivity"
-            android:parentActivityName="com.jorgepinedo.faivpizza.MainActivity"></activity>
+            android:parentActivityName="com.jorgepinedo.faivpizza.MainActivity">
+
+        </activity>
         <activity android:name="com.jorgepinedo.faivpizza.LockActivity" />
         <activity android:name="com.jorgepinedo.faivpizza.PaymentActivity">
 
         </activity>
         <activity android:name="com.jorgepinedo.faivpizza.FinishActivity" />
         <activity android:name="com.jorgepinedo.faivpizza.InitSplashActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

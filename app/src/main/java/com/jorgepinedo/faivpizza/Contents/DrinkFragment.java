@@ -120,7 +120,7 @@ public class DrinkFragment extends Fragment implements ListMenuDrinkAdapter.even
             }
         });
 
-        ((MainActivity)getActivity()).hideInformation(true);
+        ((MainActivity)getActivity()).hideInformation(false);
 
 
         return view;

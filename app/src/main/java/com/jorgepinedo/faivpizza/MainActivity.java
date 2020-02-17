@@ -193,11 +193,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             content_pizza.bringToFront();
 
             int grams = app_db.ordersDetailDAO().getGrams();
+            int carbohidratos = app_db.ordersDetailDAO().getCarbohidratos();
+            int proteinas = app_db.ordersDetailDAO().getProteina();
+            int energia = app_db.ordersDetailDAO().getEnergia();
+            int grasa = app_db.ordersDetailDAO().getGrasa();
 
-            tv_calorias.setText("0");
-            tv_grasa.setText("0");
-            tv_proteinas.setText("0");
-            tv_carbohidratos.setText("0");
+            tv_calorias.setText(energia+"");
+            tv_grasa.setText(grasa+"");
+            tv_proteinas.setText(proteinas+"");
+            tv_carbohidratos.setText(carbohidratos+"");
         }
     }
 

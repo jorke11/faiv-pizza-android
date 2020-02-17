@@ -28,14 +28,17 @@ public class ListMenuAdapterAdmin extends RecyclerView.Adapter<ListMenuAdapterAd
     private Activity activity;
     View view;
     App app_db;
+    private OnClickListener onClickListener;
 
-    public ListMenuAdapterAdmin(List<Products> listItem, int resource, Activity activity, App app_db) {
+
+    public ListMenuAdapterAdmin(List<Products> listItem, int resource, Activity activity,  OnClickListener onClickListener,App app_db) {
         this.listItem = listItem;
         this.resource = resource;
         this.activity = activity;
         this.filterList = new ArrayList<Products>();
         this.filterList.addAll(this.listItem);
         this.app_db = app_db;
+        this.onClickListener = onClickListener;
     }
 
     @NonNull
@@ -80,10 +83,10 @@ public class ListMenuAdapterAdmin extends RecyclerView.Adapter<ListMenuAdapterAd
             }
         });*/
 
-        holder.imageView.setOnClickListener(new View.OnClickListener() {
+        holder.card_complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                onClickListener.onClick(row);
             }
         });
 
@@ -111,6 +114,11 @@ public class ListMenuAdapterAdmin extends RecyclerView.Adapter<ListMenuAdapterAd
             card_complete = itemView.findViewById(R.id.card_complete);
 
         }
+
+    }
+
+    public interface OnClickListener{
+        void onClick(Products products);
     }
 
 }

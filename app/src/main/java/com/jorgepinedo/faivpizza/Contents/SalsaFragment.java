@@ -80,6 +80,7 @@ public class SalsaFragment extends Fragment implements ListMenuAdapter.OnDragLis
             image_salsa.setImageResource(id);
         }
 
+        ((MainActivity)getActivity()).hideInformation(false);
 
         return view;
     }

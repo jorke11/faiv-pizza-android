@@ -104,6 +104,14 @@ public interface OrdersDetailDAO {
 
     @Query("select count(*) as total \n" +
             "from OrdersDetail d\n" +
+            "join products p ON p.id=d.product_id and p.category_id in(7,8)" +
+            "JOIN Orders o On o.id=d.order_id and o.status_id=1 and d.status_id IN(:status_id) " +
+            "WHERE d.order_id=:order_id")
+    int getValidateDrink(int[] status_id, int order_id);
+
+    @Query("select count(*) as total \n" +
+            "from OrdersDetail d\n" +
+            "join products p ON p.id=d.product_id and p.category_id not in(7,8) and p.category_id in(1,2,3)" +
             "JOIN Orders o On o.id=d.order_id and o.status_id=1 and d.status_id IN(:status_id) " +
             "WHERE d.order_id=:order_id")
     int getValidate(int[] status_id, int order_id);
@@ -119,6 +127,26 @@ public interface OrdersDetailDAO {
             "from OrdersDetail o\n" +
             "JOIN products p ON p.id = o.product_id and status_id=2")
     int getGrams();
+
+    @Query("select sum(p.carbohidratos) gram\n" +
+            "from OrdersDetail o\n" +
+            "JOIN products p ON p.id = o.product_id and status_id=1")
+    int getCarbohidratos();
+
+    @Query("select sum(p.grasa) gram\n" +
+            "from OrdersDetail o\n" +
+            "JOIN products p ON p.id = o.product_id and status_id=1")
+    int getGrasa();
+
+    @Query("select sum(p.proteina) gram\n" +
+            "from OrdersDetail o\n" +
+            "JOIN products p ON p.id = o.product_id and status_id=1")
+    int getProteina();
+
+    @Query("select sum(p.energia) gram\n" +
+            "from OrdersDetail o\n" +
+            "JOIN products p ON p.id = o.product_id and status_id=1")
+    int getEnergia();
 
     @Query("UPDATE OrdersDetail set quantity=:quantity where id=:id")
     void updateQuantity(int id,int quantity);

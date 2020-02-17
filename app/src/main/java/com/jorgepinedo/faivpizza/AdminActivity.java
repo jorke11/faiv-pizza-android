@@ -1,5 +1,6 @@
 package com.jorgepinedo.faivpizza;
 
+import android.app.AlertDialog;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,7 +8,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.room.Room;
@@ -19,21 +22,24 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.jorgepinedo.faivpizza.Adapters.ListMenuAdapter;
 import com.jorgepinedo.faivpizza.Adapters.ListMenuAdapterAdmin;
 import com.jorgepinedo.faivpizza.Database.App;
 import com.jorgepinedo.faivpizza.Models.Orders;
+import com.jorgepinedo.faivpizza.Models.OrdersDetail;
 import com.jorgepinedo.faivpizza.Models.Products;
 import com.jorgepinedo.faivpizza.Tools.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AdminActivity extends AppCompatActivity{
+public class AdminActivity extends AppCompatActivity implements ListMenuAdapterAdmin.OnClickListener{
 
     CheckBox checkbox_printer;
     TextInputEditText tv_ipaddress,tv_table;
@@ -70,7 +76,7 @@ public class AdminActivity extends AppCompatActivity{
         tv_ipaddress.setText(Utils.getItem(this,"IP_SERVER"));
         tv_table.setText(Utils.getItem(this,"TABLE"));
 
-        listMenuAdapter = new ListMenuAdapterAdmin(list,R.layout.card_product_item,this,app_db);
+        listMenuAdapter = new ListMenuAdapterAdmin(list,R.layout.card_product_item, this,(ListMenuAdapterAdmin.OnClickListener) this,app_db);
 
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -198,4 +204,62 @@ public class AdminActivity extends AppCompatActivity{
         }
     }
 
+    @Override
+    public void onClick(final Products products) {
+        Log.d("JORKE",products.toString());
+
+        final AlertDialog dialog;
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
+        final View mView=getLayoutInflater().inflate(R.layout.dialog_product,null);
+
+        Button accept = mView.findViewById(R.id.btn_accept);
+        Button btn_cancel = mView.findViewById(R.id.btn_cancel);
+
+        TextView tv_title = mView.findViewById(R.id.tv_title);
+        final TextView tv_carbohidratos = mView.findViewById(R.id.tv_carbohidratos);
+        final TextView tv_grasa = mView.findViewById(R.id.tv_grasa);
+        final TextView tv_energia = mView.findViewById(R.id.tv_energia);
+        final TextView tv_proteina = mView.findViewById(R.id.tv_proteina);
+
+        tv_title.setText(products.getTitle()+"");
+        tv_carbohidratos.setText(products.getCarbohidratos()+"");
+        tv_grasa.setText(products.getGrasa()+"");
+        tv_energia.setText(products.getEnergia()+"");
+        tv_proteina.setText(products.getProteina()+"");
+
+
+        mBuilder.setView(mView);
+
+        int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
+        int height = (int)(getResources().getDisplayMetrics().heightPixels*0.90);
+
+        dialog = mBuilder.create();
+        //dialog.getWindow().setLayout(width, height);
+        dialog.setTitle("");
+        dialog.show();
+
+
+        accept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                products.setCarbohidratos(Integer.parseInt(tv_carbohidratos.getText().toString()));
+                products.setGrasa(Integer.parseInt(tv_grasa.getText().toString()));
+                products.setEnergia(Integer.parseInt(tv_energia.getText().toString()));
+                products.setProteina(Integer.parseInt(tv_proteina.getText().toString()));
+                app_db.productsDAO().update(products);
+
+                listMenuAdapter.notifyDataSetChanged();
+                Toast.makeText(AdminActivity.this,"Producto actializado",Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+    }
 }

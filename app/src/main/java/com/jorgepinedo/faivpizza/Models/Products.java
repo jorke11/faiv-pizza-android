@@ -39,8 +39,19 @@ public class Products implements Serializable {
     @ColumnInfo(name="priority")
     private int priority;
 
+    @ColumnInfo(name="carbohidratos")
+    private int carbohidratos;
 
-    public Products(String title,float price, String url, int grams, int category_id, int pos_id, int type_id, int priority) {
+    @ColumnInfo(name="proteina")
+    private int proteina;
+
+    @ColumnInfo(name="grasa")
+    private int grasa;
+
+    @ColumnInfo(name="energia")
+    private int energia;
+
+    public Products(String title,float price, String url, int grams, int category_id, int pos_id, int type_id, int priority,int carbohidratos,int proteina,int grasa,int energia) {
         this.title = title;
         this.status = "ok";
         this.price = price;
@@ -50,6 +61,10 @@ public class Products implements Serializable {
         this.pos_id = pos_id;
         this.type_id = type_id;
         this.priority = priority;
+        this.carbohidratos = carbohidratos;
+        this.proteina = proteina;
+        this.grasa = grasa;
+        this.energia = energia;
     }
 
     public int getId() {
@@ -132,6 +147,38 @@ public class Products implements Serializable {
         this.priority = priority;
     }
 
+    public int getCarbohidratos() {
+        return carbohidratos;
+    }
+
+    public void setCarbohidratos(int carbohidratos) {
+        this.carbohidratos = carbohidratos;
+    }
+
+    public int getProteina() {
+        return proteina;
+    }
+
+    public void setProteina(int proteina) {
+        this.proteina = proteina;
+    }
+
+    public int getEnergia() {
+        return energia;
+    }
+
+    public int getGrasa() {
+        return grasa;
+    }
+
+    public void setGrasa(int grasa) {
+        this.grasa = grasa;
+    }
+
+    public void setEnergia(int energia) {
+        this.energia = energia;
+    }
+
     @Override
     public String toString() {
         return "Products{" +
@@ -145,6 +192,10 @@ public class Products implements Serializable {
                 ", pos_id=" + pos_id +
                 ", type_id=" + type_id +
                 ", priority=" + priority +
+                ", carbohidratos=" + carbohidratos +
+                ", proteina=" + proteina +
+                ", grasa=" + grasa +
+                ", energia=" + energia +
                 '}';
     }
 }

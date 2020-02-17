@@ -10,11 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.jorgepinedo.faivpizza.Adapters.ListMenuAdapterTopping;
 import com.jorgepinedo.faivpizza.Database.App;
 import com.jorgepinedo.faivpizza.MainActivity;
 import com.jorgepinedo.faivpizza.Models.Ingredients;
+import com.jorgepinedo.faivpizza.Models.Orders;
 import com.jorgepinedo.faivpizza.Models.Products;
 import com.jorgepinedo.faivpizza.R;
 import com.jorgepinedo.faivpizza.Tools.Utils;
@@ -45,6 +47,26 @@ public class ToppingFragment extends Fragment  implements ListMenuAdapterTopping
         View view =inflater.inflate(R.layout.fragment_topping, container, false);
 
         app_db = Utils.newInstanceDB(getActivity());
+        Orders orders = app_db.ordersDAO().getOrderCurrent();
+
+
+        int validate = app_db.ordersDetailDAO().getValidate(new int[]{1},orders.getId());
+
+        int total = app_db.ordersDetailDAO().getTotal(new int[]{2,3});
+
+        if(validate < 3 && total==0){
+            Toast.makeText(getActivity(),"Te faltan ingredientes",Toast.LENGTH_SHORT).show();
+            final Fragment fragment = new MasaFragment();
+            ((MainActivity)getActivity()).chageFragment(fragment);
+            ((MainActivity)getActivity()).enableBtnsTwo();
+        }else{
+            if(validate < 3){
+                Toast.makeText(getActivity(),"Te faltan ingredientes",Toast.LENGTH_SHORT).show();
+                final Fragment fragment = new MasaFragment();
+                ((MainActivity)getActivity()).chageFragment(fragment);
+                ((MainActivity)getActivity()).enableBtnsTwo();
+            }
+        }
         favorite = app_db.productsDAO().getAllProductsCategory(new int[]{4});
         protein = app_db.productsDAO().getAllProductsCategory(new int[]{5});
         vegetable = app_db.productsDAO().getAllProductsCategory(new int[]{6});

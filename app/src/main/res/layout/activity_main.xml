@@ -194,7 +194,7 @@
                     android:fontFamily="sans-serif"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="123"
+                    android:text="0"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="14dp"
@@ -220,7 +220,7 @@
                         android:fontFamily="sans-serif"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="123 g"
+                        android:text="0 g"
                         android:textAlignment="center"
                         android:textColor="@color/white"
 
@@ -248,7 +248,7 @@
                         android:fontFamily="sans-serif"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="123 g"
+                        android:text="0 g"
                         android:textAlignment="center"
                         android:textColor="@color/white"
 
@@ -276,7 +276,7 @@
                         android:fontFamily="sans-serif"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="123g"
+                        android:text="0g"
                         android:textAlignment="center"
                         android:textColor="@color/white"
                         />

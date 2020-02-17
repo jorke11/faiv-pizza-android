@@ -78,15 +78,25 @@ public class ReviewFragment extends Fragment implements ListMenuAdapterReview.Ev
 
         int total = app_db.ordersDetailDAO().getTotal(new int[]{2,3});
 
+        int totalDrink = app_db.ordersDetailDAO().getValidateDrink(new int[]{1},orders.getId());
+
+
         Log.d("JORKE",total+"");
         Log.d("JORKE-val",validate+"");
-        if(validate < 3 && total==0){
+        if((validate < 3 && total == 0) && totalDrink == 0){
             Toast.makeText(getActivity(),"Te faltan ingredientes",Toast.LENGTH_SHORT).show();
             final Fragment fragment = new MasaFragment();
             ((MainActivity)getActivity()).chageFragment(fragment);
             ((MainActivity)getActivity()).enableBtnsTwo();
         }else{
-            validateTotal();
+            if(validate < 3 && totalDrink == 0){
+                Toast.makeText(getActivity(),"Te faltan ingredientes",Toast.LENGTH_SHORT).show();
+                final Fragment fragment = new MasaFragment();
+                ((MainActivity)getActivity()).chageFragment(fragment);
+                ((MainActivity)getActivity()).enableBtnsTwo();
+            }else {
+                validateTotal();
+            }
         }
 
         getRequestCurrent();
