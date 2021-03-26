@@ -33,9 +33,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ToggleButton btn_1,btn_masa,btn_salsa,btn_cheese,btn_toppings,btn_6,btn_menu_review;
     TextView tv_total,tv_subtotal,tv_calorias,tv_grasa,tv_proteinas,tv_carbohidratos;
     App app_db;
-    CardView content_pizza,real_content;
+    CardView content_pizza,real_content,cart_total;
     private int mCounter = 0;
     private Handler mHandler = new Handler();
+    View access_admin;
 
 
     @Override
@@ -50,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         final ViewGroup rootView = (ViewGroup) findViewById(R.id.main_activity);
 
         tv_total = findViewById(R.id.tv_total);
+        cart_total = findViewById(R.id.cart_total);
+
         tv_subtotal = findViewById(R.id.tv_subtotal);
         content_pizza = findViewById(R.id.content_pizza);
         real_content = findViewById(R.id.real_content);
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_grasa = findViewById(R.id.tv_grasa);
         tv_proteinas = findViewById(R.id.tv_proteinas);
         tv_carbohidratos = findViewById(R.id.tv_carbohidratos);
+        access_admin = findViewById(R.id.access_admin);
 
         /*final Transition transition = new Slide(Gravity.RIGHT);
         transition.setDuration(400);
@@ -83,6 +87,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 TransitionManager.beginDelayedTransition((ViewGroup) rootView, transition);*/
                 real_content.setVisibility(View.GONE);
                 real_content.bringToFront();
+            }
+        });
+
+        access_admin.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (mCounter == 0)
+                            mHandler.postDelayed(mResetCounter, 3000);
+
+                        mCounter++;
+
+                        if (mCounter == 5){
+                            mHandler.removeCallbacks(mResetCounter);
+                            mCounter = 0;
+                            Toast.makeText(MainActivity.this, "Five taps in three seconds", Toast.LENGTH_SHORT).show();
+                        }
+                        return false;
+                    case MotionEvent.ACTION_UP:
+                        mCounter=0;
+                        mHandler.removeCallbacks(mResetCounter);
+                        return false;
+                    case MotionEvent.ACTION_CANCEL:
+                        mCounter=0;
+                        mHandler.removeCallbacks(mResetCounter);
+                        return false;
+
+                    default :
+                        return false;
+                }
             }
         });
 
@@ -137,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
-    @Override
+    /*@Override
     public boolean onTouchEvent(MotionEvent event) {
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -164,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             default :
                 return super.onTouchEvent(event);
         }
-    }
+    }*/
 
     public void initButton(){
         btn_masa.setEnabled(false);

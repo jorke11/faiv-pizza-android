@@ -1,7 +1,10 @@
 package com.jorgepinedo.faivpizza.Tools;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import androidx.room.Room;
 
@@ -96,6 +99,13 @@ public class Utils {
         //DecimalFormat formatter = new DecimalFormat("###,###,##0.00");
 
         return formatter.format(Double.parseDouble(String.valueOf(number)));
+    }
+
+    public static boolean getStateNetworking(Context context){
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork !=null && activeNetwork.isConnected();
     }
 
 }

@@ -75,24 +75,27 @@ public class InitSplashActivity extends AppCompatActivity {
         //favorits
         validateProduct(new Products("Prosciutto",4500,"prosciutto",30,4,7,2,1,0,8,2,59));
         validateProduct(new Products("Pollo",1900,"pollo",30,4,8,2,9,0,9,2,59));
-        validateProduct(new Products("Pavo",3900,"pavo",30,4,9,2,11,1,5,1,38));
-        validateProduct(new Products("Jamon de cerdo",1900,"jamon_cerdo",30,4,17,2,10,1,5,1,36));
+        validateProduct(new Products("Champiñon",900,"champinones",20,4,10,2,13,1,1,0,4));
+        validateProduct(new Products("Piña",800,"pina",20,4,11,2,3,3,0,0,10));
+        validateProduct(new Products("Ciruelas",900,"ciruelas",20,4,15,2,4,2,0,0,9));
+        validateProduct(new Products("Tomates secos",3500,"tomate_seco",20,4,16,2,5,8,2,0,45));
+        validateProduct(new Products("Queso parmesano",700,"queso_parmessano",10,4,19,2,14,0,4,3,39));
 
-        validateProduct(new Products("Tocineta",1500,"tocineta",20,4,14,2,6,0,7,8,108));
-        validateProduct(new Products("Pepperoni",2500,"pepperoni",30,4,20,2,7,1,6,12,140));
 
         //protein
-        validateProduct(new Products("Champiñon",900,"champinones",20,5,10,2,13,1,1,0,4));
-        validateProduct(new Products("Rugula",400,"rugula",10,5,13,2,12,0,0,0,3));
-        validateProduct(new Products("Aceitunas negras",1000,"aceitunas_negras",20,5,18,2,2,1,0,2,21));
-        validateProduct(new Products("Tomate Chonto",600,"tomate_chonto",20,5,12,2,8,1,0,0,4));
-        validateProduct(new Products("Tomates secos",3500,"tomate_seco",20,5,16,2,5,8,2,0,45));
-        validateProduct(new Products("Cebolla caramelizada",800,"cebolla_caramelizada",20,5,21,2,15,7,1,1,38));
+        validateProduct(new Products("Pavo",3900,"pavo",30,5,9,2,11,1,5,1,38));
+        validateProduct(new Products("Tocineta",1500,"tocineta",20,5,14,2,6,0,7,8,108));
+        validateProduct(new Products("Jamon de cerdo",1900,"jamon_cerdo",30,5,17,2,10,1,5,1,36));
+        validateProduct(new Products("Pepperoni",2500,"pepperoni",30,5,20,2,7,1,6,12,140));
+
 
         //vegetables
-        validateProduct(new Products("Piña",800,"pina",20,6,11,2,3,3,0,0,10));
-        validateProduct(new Products("Ciruelas",900,"ciruelas",20,6,15,2,4,2,0,0,9));
-        validateProduct(new Products("Queso parmesano",700,"queso_parmessano",10,6,19,2,14,0,4,3,39));
+        validateProduct(new Products("Rugula",400,"rugula",10,6,13,2,12,0,0,0,3));
+        validateProduct(new Products("Aceitunas negras",1000,"aceitunas_negras",20,6,18,2,2,1,0,2,21));
+        validateProduct(new Products("Tomate Chonto",600,"tomate_chonto",20,6,12,2,8,1,0,0,4));
+        validateProduct(new Products("Cebolla carameliza",800,"cebolla_caramelizada",20,6,21,2,15,7,1,1,38));
+
+
 
         //Bebidas
         validateProduct(new Products("Agua",2000,"agua",10,7,6,1,1,0,0,0,0));

@@ -8,27 +8,64 @@
     android:background="@drawable/fondo">
 
     <android.support.v7.widget.CardView
+        android:id="@+id/card_return"
+        android:layout_width="190dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="152dp"
+        android:layout_marginTop="52dp"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardElevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:cardPreventCornerOverlap="false"
+        app:layout_constraintTop_toTopOf="parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <ImageView
+
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".4"
+                android:src="@drawable/back_green" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".6"
+                android:text="Volver"
+                android:textColor="@color/green"
+                android:gravity="center_vertical"
+                android:textSize="35dp" />
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView2"
         android:layout_width="1000dp"
         android:layout_height="589dp"
+        app:cardBackgroundColor="@color/blue_menu"
+        app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.518"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:cardCornerRadius="20dp"
-        app:cardBackgroundColor="@color/blue_menu"
         app:layout_constraintVertical_bias="0.736">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <TextView
-                android:paddingTop="40dp"
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="40dp"
                 android:text="Orden Final"
                 android:textAlignment="center"
                 android:textColor="@color/white"

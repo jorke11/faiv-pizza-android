@@ -93,7 +93,7 @@ public interface OrdersDetailDAO {
     @Query("select o.id,p.title,p.url,p.category_id,p.priority \n" +
             "from OrdersDetail o\n" +
             "join products p ON p.id=o.product_id " +
-            "WHERE p.category_id IN (:cat)and o.status_id=1")
+            "WHERE p.category_id IN (:cat)and o.status_id=1 ORDER BY p.priority desc")
     List<Ingredients> getcategoryExists(int[] cat);
 
     @Query("select sum(p.price * d.quantity) as total \n" +

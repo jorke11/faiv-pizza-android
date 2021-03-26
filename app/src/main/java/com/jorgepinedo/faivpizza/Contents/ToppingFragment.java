@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,13 +29,13 @@ public class ToppingFragment extends Fragment  implements ListMenuAdapterTopping
 
     RecyclerView recycler_favorite,recycler_protein,recycler_vegetable;
     ListMenuAdapterTopping listMenuAdapterfav,listMenuAdapterVeg,listMenuAdapterPro;
-    ImageView image_table,image_massa,image_salsa,image_queso,image_topping,image_topping2,image_step;
+    ImageView image_table,image_massa,image_salsa,image_queso,image_topping,image_topping2,image_topping3,image_step;
 
     List<Products> favorite,protein,vegetable;
     Products current_product;
     App app_db;
 
-    String topping_1,topping_2;
+    String topping_1,topping_2,topping_3;
 
     public ToppingFragment() {
         // Required empty public constructor
@@ -82,13 +83,18 @@ public class ToppingFragment extends Fragment  implements ListMenuAdapterTopping
         image_topping = view.findViewById(R.id.image_topping);
         image_topping2 = view.findViewById(R.id.image_topping2);
         image_step = view.findViewById(R.id.image_step);
+        image_topping3 = view.findViewById(R.id.image_topping3);
 
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recycler_favorite.setLayoutManager(linearLayoutManager);
 
+        recycler_favorite.setHasFixedSize(true);
+        recycler_favorite.setItemViewCacheSize(10);
+
         listMenuAdapterfav = new ListMenuAdapterTopping(favorite,R.layout.card_product_item_altern,getActivity(), (ListMenuAdapterTopping.OnDragListener) this,app_db);
         recycler_favorite.setAdapter(listMenuAdapterfav);
+
 
         /*Utils.setItem(getActivity(),"topping_1","");
         Utils.setItem(getActivity(),"topping_2","");*/
@@ -98,12 +104,18 @@ public class ToppingFragment extends Fragment  implements ListMenuAdapterTopping
         linearLayoutManagerFavorite.setOrientation(LinearLayoutManager.HORIZONTAL);
         recycler_protein.setLayoutManager(linearLayoutManagerFavorite);
 
+        recycler_protein.setHasFixedSize(true);
+        recycler_protein.setItemViewCacheSize(10);
+
         listMenuAdapterPro = new ListMenuAdapterTopping(protein,R.layout.card_product_item_altern,getActivity(), (ListMenuAdapterTopping.OnDragListener) this,app_db);
         recycler_protein.setAdapter(listMenuAdapterPro);
 
         LinearLayoutManager linearLayoutManagerVegetable=new LinearLayoutManager(getActivity());
         linearLayoutManagerVegetable.setOrientation(LinearLayoutManager.HORIZONTAL);
         recycler_vegetable.setLayoutManager(linearLayoutManagerVegetable);
+
+        recycler_vegetable.setHasFixedSize(true);
+        recycler_vegetable.setItemViewCacheSize(10);
 
         listMenuAdapterVeg = new ListMenuAdapterTopping(vegetable,R.layout.card_product_item_altern,getActivity(), (ListMenuAdapterTopping.OnDragListener) this,app_db);
         recycler_vegetable.setAdapter(listMenuAdapterVeg);
@@ -115,12 +127,13 @@ public class ToppingFragment extends Fragment  implements ListMenuAdapterTopping
         String queso= Utils.getItem(getActivity(),"queso");
         topping_1 = Utils.getItem(getActivity(),"topping_1");
         topping_2 = Utils.getItem(getActivity(),"topping_2");
+        topping_3 = Utils.getItem(getActivity(),"topping_3");
 
 
         int id;
 
-        id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/primer_topping", null, null);
-        image_step.setImageResource(id);
+        //id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/primer_topping", null, null);
+        //image_step.setImageResource(id);
 
 
         List<Ingredients> ingredients= app_db.ordersDetailDAO().getcategoryExists(new int[]{1,2,3});
@@ -142,16 +155,16 @@ public class ToppingFragment extends Fragment  implements ListMenuAdapterTopping
 
         if(toppings.size()>0){
             if(toppings.size() == 1){
-                id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/segundo_topping", null, null);
-                image_step.setImageResource(id);
+                //id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/segundo_topping", null, null);
+                //image_step.setImageResource(id);
                 id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/"+toppings.get(0).getUrl(), null, null);
                 image_topping.setImageResource(id);
                 image_topping2.setImageDrawable(null);
             }
 
             if(toppings.size() == 2){
-                id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/segundo_topping", null, null);
-                image_step.setImageResource(id);
+                //id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/segundo_topping", null, null);
+                //image_step.setImageResource(id);
 
                 id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/"+toppings.get(0).getUrl(), null, null);
                 image_topping.setImageResource(id);
@@ -164,10 +177,26 @@ public class ToppingFragment extends Fragment  implements ListMenuAdapterTopping
                     image_topping2.setImageResource(id);
                 }
             }
+            if(toppings.size() == 3){
+
+                Log.d("JORKE",toppings.toString());
+
+                //id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/segundo_topping", null, null);
+                //image_step.setImageResource(id);
+
+                id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/"+toppings.get(0).getUrl(), null, null);
+                image_topping.setImageResource(id);
+
+                int id2 = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/"+toppings.get(1).getUrl(), null, null);
+                image_topping2.setImageResource(id2);
+
+                int id3 = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/"+toppings.get(2).getUrl(), null, null);
+                image_topping3.setImageResource(id3);
+            }
 
         }else{
-            id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/primer_topping", null, null);
-            image_step.setImageResource(id);
+            //id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/primer_topping", null, null);
+            //image_step.setImageResource(id);
             image_topping.setImageDrawable(null);
             image_topping2.setImageDrawable(null);
         }
@@ -185,6 +214,47 @@ public class ToppingFragment extends Fragment  implements ListMenuAdapterTopping
         view.startDrag(clipData,dragShadowBuilder,view,0);
     }
 
+    public void loadToppings(){
+        int id=0;
+        List<Ingredients> toppings = app_db.ordersDetailDAO().getcategoryExists(new int[]{4,5,6});
+
+        if(toppings.size()>0){
+            if(toppings.size() == 1){
+                id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/"+toppings.get(0).getUrl(), null, null);
+                image_topping.setImageResource(id);
+                image_topping2.setImageDrawable(null);
+            }
+
+            if(toppings.size() == 2){
+
+                id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/"+toppings.get(0).getUrl(), null, null);
+                image_topping.setImageResource(id);
+
+                int id2 = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/"+toppings.get(1).getUrl(), null, null);
+                image_topping2.setImageResource(id2);
+                image_topping3.setImageDrawable(null);
+
+            }
+
+            if(toppings.size() == 3){
+                id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/"+toppings.get(0).getUrl(), null, null);
+                image_topping.setImageResource(id);
+
+                int id2 = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/"+toppings.get(1).getUrl(), null, null);
+                image_topping2.setImageResource(id2);
+
+                Log.d("JORKE",getActivity().getApplicationContext().getPackageName()+":drawable/"+toppings.get(2).getUrl());
+                int id3 = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/"+toppings.get(2).getUrl(), null, null);
+                image_topping3.setImageResource(id3);
+            }
+
+        }else{
+            image_topping.setImageDrawable(null);
+            image_topping2.setImageDrawable(null);
+            image_topping3.setImageDrawable(null);
+        }
+    }
+
 
     @Override
     public void onClick(int id,int total) {
@@ -193,14 +263,19 @@ public class ToppingFragment extends Fragment  implements ListMenuAdapterTopping
 
         if(ingredients.size() > 0){
             if(ingredients.size()==1){
-                id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/segundo_topping", null, null);
-                image_step.setImageResource(id);
+                //id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/segundo_topping", null, null);
+                //image_step.setImageResource(id);
                 id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/"+ingredients.get(0).getUrl(), null, null);
                 image_topping.setImageResource(id);
                 image_topping2.setImageDrawable(null);
             }
 
             if(ingredients.size() == 2){
+                id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/"+ingredients.get(1).getUrl(), null, null);
+                image_topping2.setImageResource(id);
+            }
+
+            if(ingredients.size() == 3){
                 id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/"+ingredients.get(1).getUrl(), null, null);
                 image_topping2.setImageResource(id);
 
@@ -211,12 +286,15 @@ public class ToppingFragment extends Fragment  implements ListMenuAdapterTopping
             }
 
         }else{
-            id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/primer_topping", null, null);
-            image_step.setImageResource(id);
+            //id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/primer_topping", null, null);
+            //image_step.setImageResource(id);
             image_topping.setImageDrawable(null);
             image_topping2.setImageDrawable(null);
+            image_topping3.setImageDrawable(null);
         }
 
+
+        loadToppings();
 
         listMenuAdapterfav.notifyDataSetChanged();
         listMenuAdapterPro.notifyDataSetChanged();

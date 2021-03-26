@@ -3,6 +3,8 @@ package com.jorgepinedo.faivpizza.Contents;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,6 +36,7 @@ import com.jorgepinedo.faivpizza.Models.Orders;
 import com.jorgepinedo.faivpizza.Models.OrdersDetail;
 import com.jorgepinedo.faivpizza.Models.Products;
 import com.jorgepinedo.faivpizza.Models.Review;
+import com.jorgepinedo.faivpizza.PaymentActivity;
 import com.jorgepinedo.faivpizza.R;
 import com.jorgepinedo.faivpizza.Tools.Utils;
 
@@ -83,19 +86,36 @@ public class ReviewFragment extends Fragment implements ListMenuAdapterReview.Ev
 
         Log.d("JORKE",total+"");
         Log.d("JORKE-val",validate+"");
+        Log.d("JORKE-drnk",totalDrink+"");
         if((validate < 3 && total == 0) && totalDrink == 0){
             Toast.makeText(getActivity(),"Te faltan ingredientes",Toast.LENGTH_SHORT).show();
             final Fragment fragment = new MasaFragment();
             ((MainActivity)getActivity()).chageFragment(fragment);
             ((MainActivity)getActivity()).enableBtnsTwo();
         }else{
-            if(validate < 3 && totalDrink == 0){
-                Toast.makeText(getActivity(),"Te faltan ingredientes",Toast.LENGTH_SHORT).show();
-                final Fragment fragment = new MasaFragment();
-                ((MainActivity)getActivity()).chageFragment(fragment);
-                ((MainActivity)getActivity()).enableBtnsTwo();
+            Log.d("JORKE","aca");
+            if(validate < 3 && totalDrink > 0){
+                Log.d("JORKE","aca2");
+                if(validate==0 && totalDrink>0){
+                    validateTotal();
+                }else{
+                    Log.d("JORKE","aca3");
+                    Toast.makeText(getActivity(),"Te faltan ingredientes",Toast.LENGTH_SHORT).show();
+                    final Fragment fragment = new MasaFragment();
+                    ((MainActivity)getActivity()).chageFragment(fragment);
+                    ((MainActivity)getActivity()).enableBtnsTwo();
+                }
             }else {
-                validateTotal();
+                Log.d("JORKE","aca3");
+                if(validate<3 && total==0){
+                    Toast.makeText(getActivity(),"Te faltan ingredientes",Toast.LENGTH_SHORT).show();
+                    final Fragment fragment = new MasaFragment();
+                    ((MainActivity)getActivity()).chageFragment(fragment);
+                    ((MainActivity)getActivity()).enableBtnsTwo();
+                }else {
+                    validateTotal();
+                }
+
             }
         }
 
@@ -187,8 +207,7 @@ public class ReviewFragment extends Fragment implements ListMenuAdapterReview.Ev
         int total = app_db.ordersDetailDAO().getTotal(new int[]{1});
 
         if(total == 0){
-
-            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+            /*AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
             alert.setTitle("Sin Producto");
             alert.setMessage("Deseas ir al pago?");
             alert.setPositiveButton("Si", new DialogInterface.OnClickListener() {
@@ -212,7 +231,58 @@ public class ReviewFragment extends Fragment implements ListMenuAdapterReview.Ev
                 }
             });
 
-            alert.create().show();
+            alert.create().show();*/
+
+
+
+            final AlertDialog dialog;
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+            final View mView=getLayoutInflater().inflate(R.layout.dialog_options_review,null);
+
+            Button accept = mView.findViewById(R.id.btn_accept);
+            Button review = mView.findViewById(R.id.btn_review);
+            Button btn_cancel = mView.findViewById(R.id.btn_cancel);
+
+
+            mBuilder.setView(mView);
+
+            int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
+            int height = (int)(getResources().getDisplayMetrics().heightPixels*0.90);
+
+            dialog = mBuilder.create();
+            //dialog.getWindow().setLayout(width, height);
+            dialog.setTitle("");
+            dialog.show();
+
+
+            accept.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    final Orders orders = app_db.ordersDAO().getOrderCurrent();
+                    app_db.ordersDetailDAO().printedOrder(orders.getId());
+                    startActivity(new Intent(getActivity(), PaymentActivity.class));
+                }
+            });
+
+            review.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            btn_cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    Toast.makeText(getActivity(),"No tienes productos Seleccionados",Toast.LENGTH_SHORT).show();
+                    final Fragment fragment = new MasaFragment();
+                    ((MainActivity)getActivity()).chageFragment(fragment);
+                    ((MainActivity)getActivity()).enableBtnsTwo();
+
+                }
+            });
 
 
             return false;
@@ -351,81 +421,90 @@ public class ReviewFragment extends Fragment implements ListMenuAdapterReview.Ev
         payment.setVisibility(View.GONE);
         spinner.setVisibility(View.VISIBLE);
 
-        String url=IP+"/api/orders";
 
 
-        final Orders orders = app_db.ordersDAO().getOrderCurrent();
+        if(Utils.getStateNetworking(getContext())) {
 
 
-        if(Utils.getItem(getActivity(),"PRINTER").equals("false")){
-            Log.d("JORKE","Without printer");
-            app_db.ordersDetailDAO().printedOrder(orders.getId());
-            startActivity(new Intent(getActivity(), FinishActivity.class));
-        }else{
-            Log.d("JORKE",url);
-            stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
+            String url = IP + "/api/orders";
 
-                    try {
-                        JSONObject obj = new JSONObject(response);
-                        Log.d("JORKE-1",response);
 
-                        orders.setOrder_post_id(Integer.parseInt(obj.getString("OrderID")));
-                        app_db.ordersDAO().update(orders);
+            final Orders orders = app_db.ordersDAO().getOrderCurrent();
 
-                        other_pizza.setEnabled(true);
-                        payment.setVisibility(View.VISIBLE);
-                        spinner.setVisibility(View.GONE);
-                        app_db.ordersDetailDAO().printedOrder(orders.getId());
-                        startActivity(new Intent(getActivity(), FinishActivity.class));
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.d("JORKE-eer",error.getMessage()+"");
+            if (Utils.getItem(getActivity(), "PRINTER").equals("false")) {
+                Log.d("JORKE", "Without printer");
+                app_db.ordersDetailDAO().printedOrder(orders.getId());
+                startActivity(new Intent(getActivity(), FinishActivity.class));
+            } else {
+                Log.d("JORKE", url);
+                stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            Log.d("JORKE-1", response);
+
+                            orders.setOrder_post_id(Integer.parseInt(obj.getString("OrderID")));
+                            app_db.ordersDAO().update(orders);
+
+                            other_pizza.setEnabled(true);
                             payment.setVisibility(View.VISIBLE);
                             spinner.setVisibility(View.GONE);
-                            Toast.makeText(getActivity(),"Problemas con el montaje de tu pizza, o falta ingredientes",Toast.LENGTH_LONG).show();
+                            app_db.ordersDetailDAO().printedOrder(orders.getId());
+                            startActivity(new Intent(getActivity(), FinishActivity.class));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
-            ){
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> headers = new HashMap<String, String>();
-                    headers.put("Content-Type", "application/x-www-form-urlencoded");
-                    //params.put("Content-Type", "application/json; charset=utf-8");
+                },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("JORKE-eer", error.getMessage() + "");
+                                payment.setVisibility(View.VISIBLE);
+                                spinner.setVisibility(View.GONE);
+                                Toast.makeText(getActivity(), "Problemas con el montaje de tu pizza, o falta ingredientes", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                ) {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String> headers = new HashMap<String, String>();
+                        headers.put("Content-Type", "application/x-www-form-urlencoded");
+                        //params.put("Content-Type", "application/json; charset=utf-8");
 
-                    headers.put("Accept", "application/json");
-                    return headers;
-                }
+                        headers.put("Accept", "application/json");
+                        return headers;
+                    }
 
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<String,String>();
-                    params.put("header",getOrderHeader());
-                    //params.put("detail",getListDetailAll());
-                    params.put("detail",getListDetailFormated());
-                    Log.d("JORKE-SEND",params.toString());
-                    return params;
-                }
-            };
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("header", getOrderHeader());
+                        //params.put("detail",getListDetailAll());
+                        params.put("detail", getListDetailFormated());
+                        Log.d("JORKE-SEND", params.toString());
+                        return params;
+                    }
+                };
 
-            RetryPolicy mRetryPolicy = new DefaultRetryPolicy(
-                    0,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                RetryPolicy mRetryPolicy = new DefaultRetryPolicy(
+                        0,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 
 
-            stringRequest.setRetryPolicy(mRetryPolicy);
+                stringRequest.setRetryPolicy(mRetryPolicy);
 
-            requestQueue = Volley.newRequestQueue(getContext());
-            requestQueue.add(stringRequest);
+                requestQueue = Volley.newRequestQueue(getContext());
+                requestQueue.add(stringRequest);
+            }
+        }else{
+            Toast.makeText(getActivity(), "Problemas con la conexion de internet", Toast.LENGTH_LONG).show();
+
         }
     }
 

@@ -99,6 +99,12 @@ public class ListMenuAdapterTopping extends RecyclerView.Adapter<ListMenuAdapter
                         id = activity.getResources().getIdentifier(activity.getApplicationContext().getPackageName()+":drawable/" + row.getUrl(), null, null);
 
                         total++;
+                    }else if(total == 2){
+                        app_db.ordersDetailDAO().insertAll(new OrdersDetail(orders.getId(), row.getId(), parent.getId()));
+                        Utils.setItem(activity, "topping_3", row.getUrl());
+                        id = activity.getResources().getIdentifier(activity.getApplicationContext().getPackageName()+":drawable/" + row.getUrl(), null, null);
+
+                        total++;
                     }else{
                         Toast.makeText(activity,"Solo puedes dos Toppings!",Toast.LENGTH_LONG).show();
                     }

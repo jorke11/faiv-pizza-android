@@ -29,7 +29,7 @@ public class DrinkFragment extends Fragment implements ListMenuDrinkAdapter.even
 
     RecyclerView recycler_products;
     ListMenuDrinkAdapter listMenuAdapter;
-    ImageView image_table,image_massa,image_salsa,image_queso,image_topping,image_topping2;
+    ImageView image_table,image_massa,image_salsa,image_queso,image_topping,image_topping2,image_topping3;
 
     List<Products> list;
     App app_db;
@@ -55,6 +55,7 @@ public class DrinkFragment extends Fragment implements ListMenuDrinkAdapter.even
         image_queso = view.findViewById(R.id.image_queso);
         image_topping = view.findViewById(R.id.image_topping);
         image_topping2 = view.findViewById(R.id.image_topping2);
+        image_topping3 = view.findViewById(R.id.image_topping3);
 
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -62,7 +63,10 @@ public class DrinkFragment extends Fragment implements ListMenuDrinkAdapter.even
 
         listMenuAdapter = new ListMenuDrinkAdapter(list,R.layout.card_product_drink,getActivity(), (ListMenuDrinkAdapter.eventCustom) this,app_db);
         recycler_products.setAdapter(listMenuAdapter);
-
+        recycler_products.setHasFixedSize(true);
+        recycler_products.setItemViewCacheSize(20);
+        recycler_products.setDrawingCacheEnabled(true);
+        recycler_products.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
         List<Ingredients> ingredients= app_db.ordersDetailDAO().getcategoryExists(new int[]{1,2,3});
 
@@ -85,7 +89,6 @@ public class DrinkFragment extends Fragment implements ListMenuDrinkAdapter.even
 
         if(toppings.size()>0){
             if(toppings.size() == 1){
-
                 id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/"+toppings.get(0).getUrl(), null, null);
                 image_topping.setImageResource(id);
                 image_topping2.setImageDrawable(null);
@@ -98,15 +101,20 @@ public class DrinkFragment extends Fragment implements ListMenuDrinkAdapter.even
 
                 int id2 = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/"+toppings.get(1).getUrl(), null, null);
                 image_topping2.setImageResource(id2);
+            }
 
-                if(toppings.get(0).getPriority() > toppings.get(1).getPriority()){
-                    image_topping.setImageResource(id2);
-                    image_topping2.setImageResource(id);
-                }
+            if(toppings.size() == 3){
+                id = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/"+toppings.get(0).getUrl(), null, null);
+                image_topping.setImageResource(id);
+
+                int id2 = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/"+toppings.get(1).getUrl(), null, null);
+                image_topping2.setImageResource(id2);
+
+                int id3 = getActivity().getResources().getIdentifier(getActivity().getApplicationContext().getPackageName()+":drawable/"+toppings.get(2).getUrl(), null, null);
+                image_topping3.setImageResource(id3);
             }
 
         }else{
-
             image_topping.setImageDrawable(null);
             image_topping2.setImageDrawable(null);
         }

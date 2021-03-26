@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="10dp">
+        <TextView
+            android:paddingTop="30dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="¿Que deseas hacer?"
+            android:textSize="30dp"
+            android:textAlignment="center"/>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <Button
+                android:layout_marginTop="1dp"
+                android:id="@+id/btn_accept"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:background="@color/green"
+                android:textColor="@color/white"
+                android:text="Ir al Pago"
+                />
+
+            <Button
+                android:layout_marginTop="10dp"
+                android:id="@+id/btn_review"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:background="@color/blue_menu"
+                android:textColor="@color/white"
+                android:text="Ver resumen"
+                />
+            <Button
+                android:layout_marginTop="10dp"
+                android:id="@+id/btn_cancel"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:textColor="@color/white"
+                android:text="Iniciar de nuevo"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

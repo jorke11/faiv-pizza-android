@@ -4,11 +4,13 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,12 +42,14 @@ public class PaymentActivity extends AppCompatActivity  implements ListMenuAdapt
     ListMenuAdapterPayment listMenuAdapter;
     Button btn_pay;
     TextView tv_service,tv_total;
+    CardView card_return;
 
     StringRequest stringRequest;
     private String IP ="";
     RequestQueue requestQueue;
 
     float total = 0,service = 0,subtotal=0;
+    ImageView btn_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +64,10 @@ public class PaymentActivity extends AppCompatActivity  implements ListMenuAdapt
         btn_pay = findViewById(R.id.btn_pay);
         tv_service = findViewById(R.id.tv_service);
         tv_total = findViewById(R.id.tv_total);
+
+        card_return = findViewById(R.id.card_return);
+
+        card_return.bringToFront();
 
         total = app_db.ordersDetailDAO().getTotal(new int[]{3});
 
@@ -144,6 +152,14 @@ public class PaymentActivity extends AppCompatActivity  implements ListMenuAdapt
             }
         });
 
+        card_return.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(PaymentActivity.this,FinishActivity.class));
+            }
+        });
+
     }
 
     private void finishOrder(final Orders orders, final int tip){
@@ -190,74 +206,79 @@ public class PaymentActivity extends AppCompatActivity  implements ListMenuAdapt
 
         final Orders orders = app_db.ordersDAO().getOrderCurrent();
 
-        String url=IP+"/api/orders";
+        if(Utils.getStateNetworking(this)){
 
-        if(Utils.getItem(this,"PRINTER").equals("false")){
-            Log.d("JORKE","Without printer");
-            orders.setStatus_id(2);
-            app_db.ordersDAO().update(orders);
-            app_db.ordersDetailDAO().updateFinishOrder(orders.getId());
-            cleanImage();
+            String url=IP+"/api/orders";
 
-            redirectLock();
-        }else {
+            if(Utils.getItem(this,"PRINTER").equals("false")){
+                Log.d("JORKE","Without printer");
+                orders.setStatus_id(2);
+                app_db.ordersDAO().update(orders);
+                app_db.ordersDetailDAO().updateFinishOrder(orders.getId());
+                cleanImage();
 
+                redirectLock();
+            }else {
+                stringRequest = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
 
-            stringRequest = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            Log.d("JORKE-1", response);
 
-                    try {
-                        JSONObject obj = new JSONObject(response);
-                        Log.d("JORKE-1", response);
+                            orders.setStatus_id(2);
+                            app_db.ordersDAO().update(orders);
+                            app_db.ordersDetailDAO().updateFinishOrder(orders.getId());
+                            cleanImage();
 
-                        orders.setStatus_id(2);
-                        app_db.ordersDAO().update(orders);
-                        app_db.ordersDetailDAO().updateFinishOrder(orders.getId());
-                        cleanImage();
+                            redirectLock();
 
-                        redirectLock();
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.d("JORKE", error.getMessage() + "");
-                            Toast.makeText(PaymentActivity.this, "Problemas con la solicitud", Toast.LENGTH_LONG).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
-            ) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> headers = new HashMap<String, String>();
-                    headers.put("Content-Type", "application/x-www-form-urlencoded");
-                    //params.put("Content-Type", "application/json; charset=utf-8");
-                    headers.put("Accept", "application/json");
-                    return headers;
-                }
+                },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("JORKE", error.getMessage() + "");
+                                Toast.makeText(PaymentActivity.this, "Problemas con la solicitud", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                ) {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String> headers = new HashMap<String, String>();
+                        headers.put("Content-Type", "application/x-www-form-urlencoded");
+                        //params.put("Content-Type", "application/json; charset=utf-8");
+                        headers.put("Accept", "application/json");
+                        return headers;
+                    }
 
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("order_id", orders.getId() + "");
-                    params.put("GratuityPercent", tip + "");
-                    params.put("order_pos_id", orders.getOrder_post_id() + "");
-                    params.put("service", service + "");
-                    params.put("total", (total + service) + "");
-                    params.put("subtotal", total + "");
-                    /*params.put("detail",getListDetailFormated());*/
-                    Log.d("JORKE-SEND-2", params.toString());
-                    return params;
-                }
-            };
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("order_id", orders.getId() + "");
+                        params.put("GratuityPercent", tip + "");
+                        params.put("order_pos_id", orders.getOrder_post_id() + "");
+                        params.put("service", service + "");
+                        params.put("total", (total + service) + "");
+                        params.put("subtotal", total + "");
+                        /*params.put("detail",getListDetailFormated());*/
+                        Log.d("JORKE-SEND-2", params.toString());
+                        return params;
+                    }
+                };
 
-            requestQueue = Volley.newRequestQueue(this);
-            requestQueue.add(stringRequest);
+                requestQueue = Volley.newRequestQueue(this);
+                requestQueue.add(stringRequest);
+            }
+        }else{
+            Toast.makeText(PaymentActivity.this, "Problemas con la conexion de internet", Toast.LENGTH_LONG).show();
+
         }
+
     }
 
     private void cleanImage() {
